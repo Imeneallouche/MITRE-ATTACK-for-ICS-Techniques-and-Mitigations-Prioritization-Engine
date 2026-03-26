@@ -1,0 +1,199 @@
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  MITRE ATT&CK ICS - Technique Priority Scoring (MCDM)        ║
+    ║                                                              ║
+    ║  Implementation of research paper methodology with:          ║
+    ║  - C1: Impact (mitigation difficulty)                        ║
+    ║  - C2: Threat Score (threat intelligence)                    ║
+    ║  - C3: Security Control Gap (detection difficulty)           ║
+    ║  - C4: Asset Impact (number of affected assets) [NEW]        ║
+    ║                                                              ║
+    ║  Using Entropy Weight Method (EWM) + Weighted Sum Method     ║
+    ╚══════════════════════════════════════════════════════════════╝
+    
+2025-11-18 13:01:21,935 - INFO - ======================================================================
+2025-11-18 13:01:21,935 - INFO - MITRE ATT&CK ICS Technique Priority Scoring
+2025-11-18 13:01:21,935 - INFO - Using Multi-Criteria Decision-Making (MCDM) Approach
+2025-11-18 13:01:21,935 - INFO - ======================================================================
+2025-11-18 13:01:21,935 - INFO - Loading data from input/technique_statistics.xlsx
+2025-11-18 13:01:22,065 - INFO - ✓ Loaded 83 techniques
+2025-11-18 13:01:22,066 - INFO - ✓ All required columns present
+2025-11-18 13:01:22,066 - INFO - 
+=== Computing Prioritization Criteria ===
+2025-11-18 13:01:22,067 - INFO - ✓ Computed C1: Impact
+2025-11-18 13:01:22,069 - INFO - ✓ Computed C2: Threat Score
+2025-11-18 13:01:22,070 - INFO - ✓ Computed C3: Security Control Gap
+2025-11-18 13:01:22,070 - INFO - ✓ Computed C4: Asset Impact
+2025-11-18 13:01:22,071 - INFO - 
+Decision matrix shape: (83, 4)
+2025-11-18 13:01:22,071 - INFO - 
+=== Criterion Statistics ===
+2025-11-18 13:01:22,071 - INFO - 
+C1_Impact:
+2025-11-18 13:01:22,072 - INFO -   Min: 0.0714
+2025-11-18 13:01:22,072 - INFO -   Max: 1.0000
+2025-11-18 13:01:22,072 - INFO -   Mean: 0.2706
+2025-11-18 13:01:22,072 - INFO -   Std: 0.1593
+2025-11-18 13:01:22,072 - INFO - 
+C2_Threat_Score:
+2025-11-18 13:01:22,073 - INFO -   Min: 0.0000
+2025-11-18 13:01:22,073 - INFO -   Max: 3.5835
+2025-11-18 13:01:22,073 - INFO -   Mean: 1.4876
+2025-11-18 13:01:22,073 - INFO -   Std: 0.8454
+2025-11-18 13:01:22,073 - INFO - 
+C3_Control_Gap:
+2025-11-18 13:01:22,073 - INFO -   Min: 0.1111
+2025-11-18 13:01:22,073 - INFO -   Max: 1.0000
+2025-11-18 13:01:22,073 - INFO -   Mean: 0.3853
+2025-11-18 13:01:22,073 - INFO -   Std: 0.2877
+2025-11-18 13:01:22,073 - INFO - 
+C4_Asset_Impact:
+2025-11-18 13:01:22,073 - INFO -   Min: 0.0000
+2025-11-18 13:01:22,073 - INFO -   Max: 2.9444
+2025-11-18 13:01:22,074 - INFO -   Mean: 1.8663
+2025-11-18 13:01:22,074 - INFO -   Std: 0.9854
+2025-11-18 13:01:22,074 - INFO - 
+=== Normalizing Decision Matrix ===
+2025-11-18 13:01:22,074 - INFO - ✓ Matrix normalized using proportional normalization
+2025-11-18 13:01:22,074 - INFO - Column sums after normalization: [1. 1. 1. 1.]
+2025-11-18 13:01:22,074 - INFO - 
+=== Computing Entropy Weights ===
+2025-11-18 13:01:22,074 - INFO - 
+Entropy Analysis Results:
+2025-11-18 13:01:22,074 - INFO - ----------------------------------------------------------------------
+2025-11-18 13:01:22,074 - INFO - C1 (Impact):
+2025-11-18 13:01:22,074 - INFO -   Entropy (E_j):     0.9657
+2025-11-18 13:01:22,074 - INFO -   Divergence (d_j):  0.0343
+2025-11-18 13:01:22,074 - INFO -   Weight (w_j):      0.2010
+2025-11-18 13:01:22,074 - INFO - C2 (Threat Score):
+2025-11-18 13:01:22,074 - INFO -   Entropy (E_j):     0.9628
+2025-11-18 13:01:22,074 - INFO -   Divergence (d_j):  0.0372
+2025-11-18 13:01:22,074 - INFO -   Weight (w_j):      0.2181
+2025-11-18 13:01:22,074 - INFO - C3 (Control Gap):
+2025-11-18 13:01:22,074 - INFO -   Entropy (E_j):     0.9477
+2025-11-18 13:01:22,074 - INFO -   Divergence (d_j):  0.0523
+2025-11-18 13:01:22,074 - INFO -   Weight (w_j):      0.3063
+2025-11-18 13:01:22,074 - INFO - C4 (Asset Impact):
+2025-11-18 13:01:22,075 - INFO -   Entropy (E_j):     0.9531
+2025-11-18 13:01:22,075 - INFO -   Divergence (d_j):  0.0469
+2025-11-18 13:01:22,075 - INFO -   Weight (w_j):      0.2746
+2025-11-18 13:01:22,075 - INFO - 
+Sum of weights: 1.0000
+2025-11-18 13:01:22,075 - INFO - ✓ Entropy weights computed successfully
+2025-11-18 13:01:22,075 - INFO - 
+=== Computing Priority Scores ===
+2025-11-18 13:01:22,076 - INFO - ✓ Priority scores computed for 83 techniques
+2025-11-18 13:01:22,076 - INFO -   Raw score range: [0.005458, 0.020173]
+2025-11-18 13:01:22,076 - INFO -   Normalized range: [0.0, 1.0]
+2025-11-18 13:01:22,076 - INFO - 
+======================================================================
+2025-11-18 13:01:22,076 - INFO - === PRIORITIZATION RESULTS SUMMARY ===
+2025-11-18 13:01:22,076 - INFO - ======================================================================
+2025-11-18 13:01:22,076 - INFO - 
+Top 10 Highest Priority Techniques:
+2025-11-18 13:01:22,076 - INFO - ----------------------------------------------------------------------
+2025-11-18 13:01:22,079 - INFO - 
+[1] T0828: Loss of Productivity and Revenue
+2025-11-18 13:01:22,079 - INFO -     Priority Score: 1.0000
+2025-11-18 13:01:22,079 - INFO -     C1 (Impact):    0.5000
+2025-11-18 13:01:22,079 - INFO -     C2 (Threat Score): 3.4657
+2025-11-18 13:01:22,079 - INFO -     C3 (Control Gap):  1.0000
+2025-11-18 13:01:22,079 - INFO -     C4 (Asset Impact): 0.0000
+2025-11-18 13:01:22,080 - INFO - 
+[2] T0837: Loss of Protection
+2025-11-18 13:01:22,080 - INFO -     Priority Score: 0.9712
+2025-11-18 13:01:22,080 - INFO -     C1 (Impact):    1.0000
+2025-11-18 13:01:22,080 - INFO -     C2 (Threat Score): 0.6931
+2025-11-18 13:01:22,080 - INFO -     C3 (Control Gap):  1.0000
+2025-11-18 13:01:22,080 - INFO -     C4 (Asset Impact): 0.0000
+2025-11-18 13:01:22,080 - INFO - 
+[3] T0895: Autorun Image
+2025-11-18 13:01:22,080 - INFO -     Priority Score: 0.9017
+2025-11-18 13:01:22,080 - INFO -     C1 (Impact):    0.5000
+2025-11-18 13:01:22,080 - INFO -     C2 (Threat Score): 0.6931
+2025-11-18 13:01:22,080 - INFO -     C3 (Control Gap):  1.0000
+2025-11-18 13:01:22,080 - INFO -     C4 (Asset Impact): 1.9459
+2025-11-18 13:01:22,080 - INFO - 
+[4] T0834: Native API
+2025-11-18 13:01:22,080 - INFO -     Priority Score: 0.7732
+2025-11-18 13:01:22,080 - INFO -     C1 (Impact):    0.5000
+2025-11-18 13:01:22,080 - INFO -     C2 (Threat Score): 1.3863
+2025-11-18 13:01:22,080 - INFO -     C3 (Control Gap):  0.5000
+2025-11-18 13:01:22,080 - INFO -     C4 (Asset Impact): 2.8904
+2025-11-18 13:01:22,080 - INFO - 
+[5] T0829: Loss of View
+2025-11-18 13:01:22,080 - INFO -     Priority Score: 0.7571
+2025-11-18 13:01:22,080 - INFO -     C1 (Impact):    0.2500
+2025-11-18 13:01:22,080 - INFO -     C2 (Threat Score): 2.7081
+2025-11-18 13:01:22,080 - INFO -     C3 (Control Gap):  1.0000
+2025-11-18 13:01:22,080 - INFO -     C4 (Asset Impact): 0.0000
+2025-11-18 13:01:22,081 - INFO - 
+[6] T0814: Denial of Service
+2025-11-18 13:01:22,081 - INFO -     Priority Score: 0.7146
+2025-11-18 13:01:22,081 - INFO -     C1 (Impact):    0.5000
+2025-11-18 13:01:22,081 - INFO -     C2 (Threat Score): 2.7081
+2025-11-18 13:01:22,081 - INFO -     C3 (Control Gap):  0.2000
+2025-11-18 13:01:22,081 - INFO -     C4 (Asset Impact): 2.7081
+2025-11-18 13:01:22,081 - INFO - 
+[7] T0846: Remote System Discovery
+2025-11-18 13:01:22,081 - INFO -     Priority Score: 0.7029
+2025-11-18 13:01:22,081 - INFO -     C1 (Impact):    0.5000
+2025-11-18 13:01:22,081 - INFO -     C2 (Threat Score): 2.4849
+2025-11-18 13:01:22,081 - INFO -     C3 (Control Gap):  0.2000
+2025-11-18 13:01:22,081 - INFO -     C4 (Asset Impact): 2.8332
+2025-11-18 13:01:22,081 - INFO - 
+[8] T0807: Command-Line Interface
+2025-11-18 13:01:22,081 - INFO -     Priority Score: 0.6879
+2025-11-18 13:01:22,081 - INFO -     C1 (Impact):    0.3333
+2025-11-18 13:01:22,081 - INFO -     C2 (Threat Score): 3.4657
+2025-11-18 13:01:22,081 - INFO -     C3 (Control Gap):  0.2500
+2025-11-18 13:01:22,081 - INFO -     C4 (Asset Impact): 2.3026
+2025-11-18 13:01:22,081 - INFO - 
+[9] T0826: Loss of Availability
+2025-11-18 13:01:22,081 - INFO -     Priority Score: 0.6816
+2025-11-18 13:01:22,081 - INFO -     C1 (Impact):    0.2500
+2025-11-18 13:01:22,081 - INFO -     C2 (Threat Score): 2.0794
+2025-11-18 13:01:22,081 - INFO -     C3 (Control Gap):  1.0000
+2025-11-18 13:01:22,081 - INFO -     C4 (Asset Impact): 0.0000
+2025-11-18 13:01:22,081 - INFO - 
+[10] T0869: Standard Application Layer Protocol
+2025-11-18 13:01:22,081 - INFO -     Priority Score: 0.6562
+2025-11-18 13:01:22,081 - INFO -     C1 (Impact):    0.2500
+2025-11-18 13:01:22,081 - INFO -     C2 (Threat Score): 2.6391
+2025-11-18 13:01:22,082 - INFO -     C3 (Control Gap):  0.3333
+2025-11-18 13:01:22,082 - INFO -     C4 (Asset Impact): 2.8332
+2025-11-18 13:01:22,082 - INFO - 
+----------------------------------------------------------------------
+2025-11-18 13:01:22,082 - INFO - Bottom 5 Lowest Priority Techniques:
+2025-11-18 13:01:22,082 - INFO - ----------------------------------------------------------------------
+2025-11-18 13:01:22,084 - INFO - [83] T0839: Module Firmware (Score: 0.0000)
+2025-11-18 13:01:22,084 - INFO - [82] T0811: Data from Information Repositories (Score: 0.0943)
+2025-11-18 13:01:22,084 - INFO - [81] T0864: Transient Cyber Asset (Score: 0.1141)
+2025-11-18 13:01:22,084 - INFO - [80] T0860: Wireless Compromise (Score: 0.1290)
+2025-11-18 13:01:22,084 - INFO - [79] T0863: User Execution (Score: 0.1692)
+2025-11-18 13:01:22,084 - INFO - 
+======================================================================
+2025-11-18 13:01:22,084 - INFO - Priority Score Distribution:
+2025-11-18 13:01:22,084 - INFO - ======================================================================
+2025-11-18 13:01:22,087 - INFO -   Very Low (0.0-0.2): 7 techniques (8.4%)
+2025-11-18 13:01:22,087 - INFO -   Low (0.2-0.4): 31 techniques (37.3%)
+2025-11-18 13:01:22,087 - INFO -   Medium (0.4-0.6): 26 techniques (31.3%)
+2025-11-18 13:01:22,087 - INFO -   High (0.6-0.8): 16 techniques (19.3%)
+2025-11-18 13:01:22,087 - INFO -   Very High (0.8-1.0): 3 techniques (3.6%)
+2025-11-18 13:01:22,087 - INFO - 
+=== Exporting Results to output/technique_priority_scores.xlsx ===
+2025-11-18 13:01:22,144 - INFO - ✓ Results exported successfully to output/technique_priority_scores.xlsx
+2025-11-18 13:01:22,144 - INFO -   Sheets created:
+2025-11-18 13:01:22,145 - INFO -     1. Priority Scores - Complete results
+2025-11-18 13:01:22,145 - INFO -     2. Top 20 Techniques - Highest priority techniques
+2025-11-18 13:01:22,145 - INFO -     3. Methodology - Criteria formulas and weights
+2025-11-18 13:01:22,145 - INFO -     4. Summary - Statistical overview
+2025-11-18 13:01:22,145 - INFO - 
+======================================================================
+2025-11-18 13:01:22,145 - INFO - ✓ Complete analysis finished successfully!
+2025-11-18 13:01:22,145 - INFO - ======================================================================
+2025-11-18 13:01:22,145 - INFO - 
+📊 Analysis Results:
+2025-11-18 13:01:22,145 - INFO -    Input file:  input/technique_statistics.xlsx
+2025-11-18 13:01:22,145 - INFO -    Output file: output/technique_priority_scores.xlsx
+2025-11-18 13:01:22,145 - INFO - 
+✓ You can now use these priority scores for adversary emulation planning!
