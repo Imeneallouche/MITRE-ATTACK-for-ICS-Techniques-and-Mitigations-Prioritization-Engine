@@ -4,10 +4,19 @@ Implements the Multi-Criteria Decision-Making approach from the research paper
 with an additional criterion for asset impact (C4)
 """
 
-import pandas as pd
-import numpy as np
+import sys
 import logging
+from pathlib import Path
 from typing import Dict, Tuple
+
+import numpy as np
+import pandas as pd
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import get_paths_technique_priority, load_environment
+
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -443,12 +452,16 @@ class TechniquePriorityScorer:
 
 
 def main():
-    """Main execution function"""
-    
-    # Configuration
-    INPUT_FILE = "input/technique_statistics.xlsx"  # Output from previous script
-    OUTPUT_FILE = "output/technique_priority_scores.xlsx"
-    
+    """Main execution function — I/O paths from environment / ``.env`` (see ``.env.example``)."""
+    load_environment()
+    paths = get_paths_technique_priority()
+    input_file = paths["input"]
+    output_file = paths["output"]
+    if not input_file.is_file():
+        logger.error("Input not found: %s — run technique_statistics.py first.", input_file)
+        sys.exit(1)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
     print("""
     ╔══════════════════════════════════════════════════════════════╗
     ║  MITRE ATT&CK ICS - Technique Priority Scoring (MCDM)        ║
@@ -464,15 +477,15 @@ def main():
     """)
     
     # Create scorer instance
-    scorer = TechniquePriorityScorer(INPUT_FILE)
+    scorer = TechniquePriorityScorer(str(input_file))
     
     # Run analysis
-    success = scorer.run_complete_analysis(OUTPUT_FILE)
+    success = scorer.run_complete_analysis(str(output_file))
     
     if success:
         logger.info("\n📊 Analysis Results:")
-        logger.info(f"   Input file:  {INPUT_FILE}")
-        logger.info(f"   Output file: {OUTPUT_FILE}")
+        logger.info("   Input file:  %s", input_file)
+        logger.info("   Output file: %s", output_file)
         logger.info("\n✓ You can now use these priority scores for adversary emulation planning!")
 
 
@@ -480,9 +493,9 @@ if __name__ == "__main__":
     """
     Usage:
     1. Install required packages:
-       pip install pandas openpyxl numpy
+       pip install -r requirements.txt
     
-    2. Ensure you have the technique statistics file from the previous script
+    2. Copy .env.example to .env; ensure INPUT_TECHNIQUE_STATISTICS exists (from technique_statistics.py)
     
     3. Run the script:
        python technique_priority_scorer.py

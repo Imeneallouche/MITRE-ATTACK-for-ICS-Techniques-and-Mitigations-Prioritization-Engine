@@ -4,11 +4,24 @@ Extracts comprehensive statistics for each technique from Neo4j Knowledge Graph
 and exports to Excel
 """
 
+import sys
+import logging
+from pathlib import Path
+from typing import Any, Dict, List
+
 import pandas as pd
 from neo4j import GraphDatabase
-import logging
-from typing import Dict, List, Any
-from datetime import datetime
+
+_REPO = Path(__file__).resolve().parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from config import (
+    ConfigurationError,
+    get_neo4j_credentials,
+    get_paths_technique_statistics,
+    load_environment,
+    safe_log_neo4j_target,
+)
 
 # Configure logging
 logging.basicConfig(
@@ -31,7 +44,7 @@ class TechniqueStatisticsGenerator:
             password: Neo4j password
         """
         self.driver = GraphDatabase.driver(uri, auth=(username, password))
-        logger.info(f"Connected to Neo4j at {uri}")
+        logger.info("Connected to Neo4j at %s", safe_log_neo4j_target(uri))
     
     def close(self):
         """Close Neo4j connection"""
@@ -408,14 +421,17 @@ class TechniqueStatisticsGenerator:
 
 
 def main():
-    """Main execution function"""
-    
-    # Configuration - UPDATE THESE VALUES
-    NEO4J_URI = "neo4j+s://77d567c6.databases.neo4j.io"
-    NEO4J_USERNAME = "neo4j"
-    NEO4J_PASSWORD = "2R3cG5YrBs79WDKkGGXUdRrcFB9h65WQoxN6_3QrtBo"
-    OUTPUT_FILE = "technique_statistics.xlsx"
-    
+    """Main execution function — configuration from environment / ``.env`` (see ``.env.example``)."""
+    load_environment()
+    try:
+        uri, username, password = get_neo4j_credentials()
+    except ConfigurationError as e:
+        logger.error("%s", e)
+        sys.exit(1)
+    paths = get_paths_technique_statistics()
+    output_path = paths["output"]
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
     print("""
     ╔══════════════════════════════════════════════════════════════╗
     ║   MITRE ATT&CK ICS - Technique Statistics Generator          ║
@@ -430,14 +446,15 @@ def main():
     
     # Create generator instance
     generator = TechniqueStatisticsGenerator(
-        uri=NEO4J_URI,
-        username=NEO4J_USERNAME,
-        password=NEO4J_PASSWORD
+        uri=uri,
+        username=username,
+        password=password
     )
     
     try:
         # Generate the report
-        generator.generate_report(OUTPUT_FILE)
+        logger.info("Writing technique statistics to: %s", output_path)
+        generator.generate_report(str(output_path))
         
         # Show example queries for manual exploration
         logger.info("\n=== Example Queries for Manual Exploration ===")
@@ -487,15 +504,12 @@ if __name__ == "__main__":
     """
     Usage:
     1. Install required packages:
-       pip install pandas openpyxl neo4j
+       pip install -r requirements.txt
     
     2. Ensure Neo4j database is running with the complete knowledge graph
     
-    3. Update configuration in main() function:
-       - NEO4J_URI: Your Neo4j connection URI
-       - NEO4J_USERNAME: Your Neo4j username
-       - NEO4J_PASSWORD: Your Neo4j password
-       - OUTPUT_FILE: Desired output file name
+    3. Copy .env.example to .env and set NEO4J_URI, NEO4J_USER (or NEO4J_USERNAME), NEO4J_PASSWORD
+       Optional: OUTPUT_TECHNIQUE_STATISTICS (default: input/technique_statistics.xlsx)
     
     4. Run the script:
        python technique_statistics.py

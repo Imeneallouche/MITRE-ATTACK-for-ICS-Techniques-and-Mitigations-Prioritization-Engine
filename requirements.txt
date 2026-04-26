@@ -1,0 +1,6 @@
+# MITRE-ATTACK-for-ICS-Techniques-and-Mitigations-Prioritization-Engine
+pandas>=1.3.0
+openpyxl>=3.0.0
+numpy>=1.20.0
+neo4j>=5.0.0
+python-dotenv>=1.0.0

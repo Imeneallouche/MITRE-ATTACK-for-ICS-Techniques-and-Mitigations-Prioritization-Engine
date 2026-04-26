@@ -1,0 +1,15 @@
+{
+  "description": "Example ICS attack chain (GRFICS-style process manipulation, technique ids only; data-driven, not hardcoded in code).",
+  "stages": [
+    { "label": "Initial Access", "technique_id": "T0819" },
+    { "label": "Discovery", "technique_id": "T0846" },
+    { "label": "Discovery", "technique_id": "T0842" },
+    { "label": "Lateral Movement", "technique_id": "T0812" },
+    { "label": "Discovery", "technique_id": "T0888" },
+    { "label": "Collection", "technique_id": "T0861" },
+    { "label": "Collection", "technique_id": "T0801" },
+    { "label": "Inhibit Response", "technique_id": "T0831" },
+    { "label": "Impact", "technique_id": "T0831" },
+    { "label": "Impact", "technique_id": "T0879" }
+  ]
+}
